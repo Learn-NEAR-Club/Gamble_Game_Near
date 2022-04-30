@@ -1,18 +1,19 @@
 [package]
-name = "Gamble_Game_Near"
+name = "gamble_game_near"
 version = "1.0.0"
-authors = ["young"]
+authors = ["young<yanghangzq@gmail.com>"]
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib","rlib"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 uint = {version = "0.9.0", default-features = false}
 near-sdk = "4.0.0-pre.7"
-near-contract-standards = "4.00-pre.7"
+near-contract-standards = "4.0.0-pre.7"
+rand = "0.8"
+getrandom = { version = "0.2", features = ["js"] }
 
 [profile.release]
 codegen-units = 1
