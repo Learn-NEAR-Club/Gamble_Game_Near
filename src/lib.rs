@@ -2,7 +2,7 @@ use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     json_types::U128,
     near_bindgen, Balance,
-    env, require, log, ext_contract, Promise,
+    env, require, log, ext_contract, Promise, 
 };
 use rand::Rng;
 
@@ -24,17 +24,25 @@ pub struct Gamble {
 
 }
 
-impl Default for Gamble{
+impl Default for Gamble {
     fn default() -> Self {
-         Self{
-            gamble_min_price : 0,
+        Self {
             gamble_max_price : 0,
-        }       
+            gamble_min_price : 0,
+        }
     }
 }
 
 #[near_bindgen]
 impl Gamble {
+
+    #[init]
+    pub fn new() -> Self {
+        Self{
+            gamble_max_price : 0,
+            gamble_min_price : 0,
+        }
+    }
 
     pub fn get_minimal_gamble_price(&self) -> u128 {
         self.gamble_min_price
