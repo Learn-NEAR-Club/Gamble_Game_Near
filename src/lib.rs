@@ -1,8 +1,7 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
-    json_types::U128,
     near_bindgen, Balance,PanicOnDefault,
-    env, require, log, ext_contract, Promise, 
+    env, require, log,  Promise, 
 };
 
 const TAX : f32 = 0.95;
