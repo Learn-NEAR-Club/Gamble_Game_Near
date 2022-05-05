@@ -1,10 +1,19 @@
+/// Enable the user to transfer near to the contract to get a chance to throw the dice
+/// When 6 is hit, Users will get @Factor times the amount of near transfered
+/// 
+/// @Author Young
+/// @Date 2022.05.05
+/// 
+
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     near_bindgen, Balance,PanicOnDefault,
     env, require, log,  Promise, 
 };
 
+// Tax collected per success throw 
 const TAX : f32 = 0.95;
+// When you throw the dice and get 6, you will get FACTOR * the bet you transfer to the contract
 const FACTOR: u128 = 6;
 
 
@@ -12,8 +21,10 @@ const FACTOR: u128 = 6;
 #[derive(BorshDeserialize, BorshSerialize,PanicOnDefault)]
 pub struct Gamble {
 
+    // Minimum price that should be transfered to the contract, revert otherwise
     gamble_min_price : Balance,
 
+    // Maximum price that should be transfered to the contract, revert otherwise
     gamble_max_price : Balance,
 
 }
@@ -22,6 +33,7 @@ pub struct Gamble {
 #[near_bindgen]
 impl Gamble {
     
+    // The new function should be called to initialize the contract, and set the gamble_max_price and the gamble_min_price
     #[init]
     pub fn new() -> Self {
         
@@ -35,19 +47,22 @@ impl Gamble {
         }
     }
 
-
+    // Get the Minimum amount of near to be transfered(Used for dapp, but usually won't as it's 0 all the time)
     pub fn get_minimal_gamble_price(&self) -> u128 {
         self.gamble_min_price
     }
 
+    // Get the Minimum amount of near to be transfered(Used for dapp)
     pub fn get_maximum_gamble_price(&self) -> u128 {
         self.gamble_max_price
     }    
 
+    // Get contract balance
     pub fn get_balance(&self) -> u128 {
         env::account_balance()
     }
 
+    // Update price everytime the account balance changes
     #[private]
     pub fn update_price(&mut self){
         let account_balance = env::account_balance();
@@ -55,7 +70,7 @@ impl Gamble {
         log!("we have {} uints in total, be sure not to exceed the max gamble price limit {} to get {}X \n", account_balance, self.gamble_max_price, FACTOR);
     }
 
-
+    // The user could sponsor the contract(maybe only the owner will...)
     #[payable]
     pub fn sponsor(&mut self){
         let sponsor_id = env::signer_account_id();
@@ -64,6 +79,8 @@ impl Gamble {
         self.update_price();
     }
 
+    // The user could transfer near to get a chance to gamble
+    // return the dice throwed by the user (Randomly generated)
     #[payable]
     pub fn gamble(&mut self) -> u8{
         let gambler_id = env::signer_account_id();
@@ -84,6 +101,7 @@ impl Gamble {
         return num;
     }
 
+    // Generate random number from 1 to 6
     pub fn rand_dice(&self) -> u8 {
         *env::random_seed().get(0).unwrap()%6+1
     }
