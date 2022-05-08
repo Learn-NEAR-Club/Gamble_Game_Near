@@ -8,7 +8,7 @@ contract info : **enable users to transfer near with the range to throw the dice
 <hr>
 contract property: 
 
-   -  **gamble_min_price** (Minimum price that should be transfered to the contract, revert otherwise)
+   - **gamble_min_price** (Minimum price that should be transfered to the contract, revert otherwise)
    - **gamble_max_price** (Maximum price that should be transfered to the contract, revert otherwise)
 
 <hr>

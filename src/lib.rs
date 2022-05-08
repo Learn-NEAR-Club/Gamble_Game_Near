@@ -57,14 +57,14 @@ impl Gamble {
         self.gamble_max_price
     }    
 
-    // Get contract balance
+    // Get contract balance U128
     pub fn get_balance(&self) -> u128 {
         env::account_balance()
     }
 
     // Update price everytime the account balance changes
-    #[private]
-    pub fn update_price(&mut self){
+    // Only contract call
+    fn update_price(&mut self){
         let account_balance = env::account_balance();
         self.gamble_max_price = account_balance / (5 * FACTOR);
         log!("we have {} uints in total, be sure not to exceed the max gamble price limit {} to get {}X \n", account_balance, self.gamble_max_price, FACTOR);
